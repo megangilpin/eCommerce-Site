@@ -1,7 +1,8 @@
 use ecommerce;
 
 create table `user_profile` (
-    `uuid` int(11) not null, 
+    `uuid` varchar(255) not null, 
+    `type` varchar(255) not null,
     `first_name` varchar(255) not null,
     `last_name` varchar(255) not null,
     `address_line1` varchar(255) not null,
