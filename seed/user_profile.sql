@@ -10,6 +10,7 @@ create table `user_profile` (
     `city` varchar(255) not null,
     `state` varchar(2) null,
     `postcode` varchar(255) null, 
+    `country` varchar(2) not null, 
     `default` boolean not null,
      primary key (`uuid`)
 );
