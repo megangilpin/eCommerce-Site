@@ -1,4 +1,4 @@
-use ecommerce; 
+use ecommerce;
 
 create table `user_profile` (
 	`uuid` int(11) not null, 
@@ -8,7 +8,7 @@ create table `user_profile` (
 	`address_line2` varchar(255) null, 
     `city` varchar(255) not null,
     `state` varchar(2) null,
-    `post_code` varchar(255) null, 
+    `postcode` varchar(255) null, 
     `default` boolean not null,
 	primary key (`uuid`)
 );

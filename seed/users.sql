@@ -1,4 +1,4 @@
-use ecommerce; 
+use ecommerce;
 
 create table `users` (
 	`uuid` int(11) not null, 
