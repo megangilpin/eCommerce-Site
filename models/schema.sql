@@ -1,4 +1,9 @@
-use ecommerce;
+-- Drops the ecommerce db if it exists currently --
+DROP DATABASE IF EXISTS ecommerce;
+-- Creates the "ecommerce" database --
+CREATE DATABASE ecommerce;
+
+USE ecommerce;
 
 create table `user_profile` (
     `uuid` varchar(255) not null, 
@@ -12,5 +17,14 @@ create table `user_profile` (
     `postcode` varchar(255) null, 
     `country` varchar(2) not null, 
     `default` boolean not null,
+     primary key (`uuid`)
+);
+
+create table `users` (
+    `uuid` varchar(255) not null, 
+    `email` varchar(255) not null,
+    `password` varchar(255) not null,
+    `first_name` varchar(255) not null,
+    `last_name` varchar(255) not null,
      primary key (`uuid`)
 );
