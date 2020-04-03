@@ -1,14 +1,14 @@
 // creates the connection to the server
 require("dotenv").config()
-var mysql = require("mysql");
+const mysql = require("mysql");
 
 // Could not get it to connect to the .env file works if you hard code all information
-var connection = mysql.createConnection({
+const connection = mysql.createConnection({
   password: process.env.DB_PASS,
   user: process.env.DB_USER,
   database: "ecommerce",
   host: process.env.DB_HOST,
-  port: "3306",
+  port: process.env.DB_PORT,
 });
 
 // Connect to the database
