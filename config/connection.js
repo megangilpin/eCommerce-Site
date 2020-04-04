@@ -1,12 +1,12 @@
 // creates the connection to the server
-require("dotenv").config()
+require("dotenv").config();
 const mysql = require("mysql");
 
 // Could not get it to connect to the .env file works if you hard code all information
 const connection = mysql.createConnection({
   password: process.env.DB_PASS,
   user: process.env.DB_USER,
-  database: "ecommerce",
+  database: process.env.DB_NAME,
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
 });
@@ -17,8 +17,6 @@ connection.connect(function (err) {
     console.error("error connecting: " + err.stack);
     return;
   }
-
-  console.log("connected as id " + connection.threadId);
 });
 
 // Export connection
