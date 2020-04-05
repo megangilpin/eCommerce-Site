@@ -12,13 +12,14 @@ export default class Login extends Component {
 
   handleKeyPress = (e) => { 
     switch(e.key) {
-    case "Enter":
+      case "Enter":
         e.preventDefault();
         this.handleSubmit(e);
         break;
-    default:
-        return;
-    }
+        
+      default:
+          return; // Do nothing
+    };
   };
 
   handleSubmit = (e) => {
@@ -30,6 +31,6 @@ export default class Login extends Component {
       <>
 
       </>
-    ) 
+    );
   };
 }; 

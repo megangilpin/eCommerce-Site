@@ -26,7 +26,7 @@ CREATE TABLE `users` (
   `password` VARCHAR(50) NOT NULL,
   `first_name` VARCHAR(20) NOT NULL,
   `last_name` VARCHAR(20) NOT NULL,
-  `last_login` BIGINT(50) NULL
-  `access_token` VARCHAR(255) NULL
+  `last_login` BIGINT(50) NULL,
+  `access_token` VARCHAR(255) NULL,
     PRIMARY KEY (`uuid`)
 );
