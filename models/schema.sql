@@ -5,26 +5,26 @@ CREATE DATABASE ecommerce;
 
 USE ecommerce;
 
-create table `user_profile` (
-    `uuid` varchar(50) not null, 
-    `type` varchar(8) not null,
-    `first_name` varchar(20) not null,
-    `last_name` varchar(20) not null,
-    `address_line1` varchar(255) not null,
-    `address_line2` varchar(255) null, 
-    `city` varchar(255) not null,
-    `state` varchar(2) null,
-    `postcode` varchar(20) null, 
-    `country` varchar(2) not null, 
-    `default` boolean not null,
-     primary key (`uuid`)
+CREATE TABLE `user_profile` (
+  `uuid` VARCHAR(50) NOT NULL, 
+  `type` VARCHAR(8) NOT NULL,
+  `first_name` VARCHAR(20) NOT NULL,
+  `last_name` VARCHAR(20) NOT NULL,
+  `address_line1` VARCHAR(255) NOT NULL,
+  `address_line2` VARCHAR(255) NULL, 
+  `city` VARCHAR(255) NOT NULL,
+  `state` VARCHAR(2) NULL,
+  `postcode` VARCHAR(20) NULL, 
+  `country` VARCHAR(2) NOT NULL, 
+  `default` BOOLEAN NOT NULL,
+    PRIMARY KEY (`uuid`)
 );
 
-create table `users` (
-    `uuid` varchar(50) not null, 
-    `email` varchar(50) not null,
-    `password` varchar(50) not null,
-    `first_name` varchar(20) not null,
-    `last_name` varchar(20) not null,
-     primary key (`uuid`)
+CREATE TABLE `users` (
+  `uuid` VARCHAR(50) NOT NULL, 
+  `email` VARCHAR(50) NOT NULL,
+  `password` VARCHAR(50) NOT NULL,
+  `first_name` VARCHAR(20) NOT NULL,
+  `last_name` VARCHAR(20) NOT NULL,
+    PRIMARY KEY (`uuid`)
 );
