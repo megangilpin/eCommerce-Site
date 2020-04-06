@@ -5,5 +5,4 @@ const usersController = require("../controllers/users");
 router.route("/all").get(usersController.all);
 router.route("/validate").post(usersController.validate);
 router.route("/register").post(usersController.register); //registers user
-router.route("/shipping").post(usersController.shipping); //add shipping address
 module.exports = router;
