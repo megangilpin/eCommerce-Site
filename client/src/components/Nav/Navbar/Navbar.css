@@ -1,0 +1,25 @@
+#navbar { 
+  background-color: #f1f1f1;
+  height: 70px;
+  position: absolute;
+  top: 0px;
+  width: 100%; 
+}
+
+.container { 
+  line-height: 35px;
+  margin: 0 auto;
+  position: relative;
+  width: 964px; 
+}
+
+ul.nav { 
+  list-style: none;
+  padding-inline-start: 0px;
+}
+
+li.nav { 
+  cursor: pointer;
+  display: inline-block;
+  padding: 0 30px 0 0;
+}
