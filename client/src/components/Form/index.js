@@ -4,8 +4,11 @@ import "./Form.css";
 class Form extends Component {
   // Setting the initial values of this.state.username and this.state.password
   state = {
-    username: "",
-    password: ""
+    first_name: "",
+    last_name: "",
+    email: "",
+    password: "",
+    confirmPassword: ""
   };
 
   // handle any changes to the input fields
@@ -30,22 +33,47 @@ class Form extends Component {
     return (
       <div>
         <form class="form1" action="">
-          <label for="firstName" class="first-name">First Name</label>
-          <input id="firstName" type="text"/>
+          <label for="first_name" class="first-name">First Name</label>
+          <input 
+            type="text"
+            name="first_name"
+            value={this.state.first_name}
+            onChange={this.handleInputChange}
+          />
 
-          <label for="lastName" class="last-name">Last Name</label>
-          <input id="lastName" type="text"/>
+          <label for="last_name" class="last-name">Last Name</label>
+          <input 
+            type="text"
+            name="last_name"
+            value={this.state.last_name}
+            onChange={this.handleInputChange}
+          />
 
           <label for="email">Email</label>
-          <input id="email" type="email"/>
+          <input 
+            type="email"
+            name="email"
+            value={this.state.email}
+            onChange={this.handleInputChange}
+          />
 
-          <label for="email">Password</label>
-          <input id="email" type="password" />
+          <label for="password">Password</label>
+          <input 
+            type="text" 
+            name="password"
+            value={this.state.password}
+            onChange={this.handleInputChange}
+          />
 
-          <label for="email">Retype Password</label>
-          <input id="email" type="password" />
+          <label for="confirmPassword">Confirm Password</label>
+          <input 
+            type="text" 
+            name="confirmPassword"
+            value={this.state.confirmPassword}
+            onChange={this.handleInputChange}
+          />
 
-          <button>Submit</button>
+          <button onClick={this.handleFormSubmit}>Submit</button>
         </form>
       </div>
     );
