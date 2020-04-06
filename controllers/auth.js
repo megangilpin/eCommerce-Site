@@ -51,35 +51,45 @@ module.exports = {
     };
   },
   register: async (req, res) => { 
-    async (req, res) => {
-      // creates uuid to use as user's ref number with the help of uuid npm
-      const uuid = uuidv4();
-      const { first_name, last_name, email, password } = req.body
 
-      // saltRound for bcrypt
-      const saltRounds = 10;
+    // creates uuid to use as user's ref number with the help of uuid npm
+    const uuid = uuidv4();
+    const { first_name, last_name, email, password } = req.body
 
-      // creates hashed password with the help of bcrypt npm
-      bcrypt.hash(password, saltRounds, function (err, hash) {
-        if (err) {
-          return res.status(500).send(err)
-        }
-        else {
-          let user = [uuid, email, hash, first_name, last_name]
+    // saltRound for bcrypt
+    const saltRounds = 10;
 
+    // creates hashed password with the help of bcrypt npm
+    bcrypt.hash(password, saltRounds, function (err, hash) {
+      if (err) {
+        return res.status(500).send(err)
+      }
+      else {
 
+        let user = [uuid, email, hash, first_name, last_name]
+
+        // TODO NEED TO CHECK IF USER ALREADY EXISTS
+        connection.query('select * from users where email = ?', [email], (err, results) => {
+          if (results[0] === undefined) {
           // adds user to the user table
-          connection.query('INSERT INTO users (uuid, email, password, first_name, last_name) VALUES (?)', [user], async (err, result) => {
-            if (err) {
-              return res.status(500).send(err)
-            }
+            connection.query('insert into users (uuid, email, password, first_name, last_name) values (?)', [user], async (error, results) => {
+              if (err) {
+                return res.status(500).send(err)
+              }
+              return res.status(200).json({
+                message: "Successfully registered user",
+                uuid: uuid,
+              })
+            });
+          } else {
             return res.status(200).json({
-              data: result,
+              users: results,
+              message: "user exits"
             })
-          });
-        }
-      });
-    }
+          };
+        });
+      }
+    });
   }, 
   validate: async (req, res) => { 
     const uuid = req.body.uuid;

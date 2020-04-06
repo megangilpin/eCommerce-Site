@@ -14,6 +14,7 @@ app.use(bodyParser.json());
 // Routes 
 app.use("/api", require("./routes/api.js"));
 app.use("/auth", require("./routes/auth.js"));
+app.use("/profile", require("./routes/profile.js"));
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "client", "build", "index.html"));

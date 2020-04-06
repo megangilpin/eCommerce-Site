@@ -16,7 +16,7 @@ CREATE TABLE `user_profile` (
   `state` VARCHAR(2) NULL,
   `postcode` VARCHAR(20) NULL, 
   `country` VARCHAR(2) NOT NULL, 
-  `default` BOOLEAN NOT NULL,
+  `primary` BOOLEAN NOT NULL,
     PRIMARY KEY (`uuid`)
 );
 
