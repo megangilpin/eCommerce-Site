@@ -6,13 +6,14 @@ const { v4: uuidv4 } = require("uuid");
 module.exports = {
   login: async (req, res) => { 
     const { email, password } = req.body;
-
+    
     try { 
       // Check database for email address
       connection.query("select uuid, password from users where email = ? limit 1", [email], async (error, results) => {
         if(results.length === 0) {     
             // Return unauthorized for invalid email
-            return res.status(401).json({ 
+            return res.status(200).json({
+              status: 401, 
               message: "Incorrect email" 
             }); 
         } else {
@@ -22,7 +23,8 @@ module.exports = {
 
           if(!isMatch) { 
             // Return unauthorized for invalid password
-            return res.status(401).json({ 
+            return res.status(200).json({ 
+              status: 401,
               message: "Incorrect password" 
             });
           } else { 
