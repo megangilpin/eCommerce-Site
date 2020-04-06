@@ -59,19 +59,18 @@ module.exports = {
     // saltRound for bcrypt
     const saltRounds = 10;
 
-    // creates hashed password with the help of bcrypt npm
-    bcrypt.hash(password, saltRounds, function (err, hash) {
-      if (err) {
-        return res.status(500).send(err)
-      }
-      else {
-
-        let user = [uuid, email, hash, first_name, last_name]
-
-        // TODO NEED TO CHECK IF USER ALREADY EXISTS
-        connection.query('select * from users where email = ?', [email], (err, results) => {
-          if (results[0] === undefined) {
-          // adds user to the user table
+    //checks if user already exists
+    connection.query('select * from users where email = ?', [email], (err, results) => {
+      // if no user exists create hashed password and add to user table
+      if (results[0] === undefined) {        
+        // creates hashed password with the help of bcrypt npm
+        bcrypt.hash(password, saltRounds, function (err, hash) {
+          if (err) {
+            return res.status(500).send(err)
+          }
+          else {
+            let user = [uuid, email, hash, first_name, last_name]
+            // adds user to the user table
             connection.query('insert into users (uuid, email, password, first_name, last_name) values (?)', [user], async (error, results) => {
               if (err) {
                 return res.status(500).send(err)
@@ -81,14 +80,15 @@ module.exports = {
                 uuid: uuid,
               })
             });
-          } else {
-            return res.status(200).json({
-              users: results,
-              message: "user exits"
-            })
-          };
+          }
         });
-      }
+      // if user does exist send back message
+      } else {
+        return res.status(200).json({
+          users: results,
+          message: "User Exists"
+        })
+      };
     });
   }, 
   validate: async (req, res) => { 
