@@ -47,30 +47,34 @@ module.exports = {
     }
   },
   register: async (req, res) => {
-    // creates uuid to use as users's ref number with the help of uuid npm
+    // creates uuid to use as user's ref number with the help of uuid npm
     const uuid = uuidv4();
-
     const { first_name, last_name, email, password, addressLine1, addressLine2, city, state, postcode, country, defaultType, type } = req.body
 
     // saltRound for bcrypt
     const saltRounds = 10;
 
-    // creates hashed password with promise with the help of bcrypt npm
+    // creates hashed password with the help of bcrypt npm
     bcrypt.hash(password, saltRounds, function (err, hash) {
       if (err) {
         return res.status(500).send(err)
       }
       else {
-        // return res.status(200).json({
-        //   data: hash,
-        // })
+
+        let user = [uuid, email, hash, first_name, last_name ]
+
+        connection.query('INSERT INTO users (uuid, email, password, first_name, last_name) VALUES (?)', [ user ], async (err, result) => {
+          if (err) {
+            return res.status(500).send(err)
+          }
+          return res.status(200).json({
+              data: result,
+            })
+        });
       }
     });
   },
   shipping: async(req, res) => {
-    const { uuid, addressLine1, addressLine2, city, state, postcode, country, defaultType, type} = req.body
-
-
 
   }
 };

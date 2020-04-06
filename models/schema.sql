@@ -28,3 +28,13 @@ CREATE TABLE `users` (
   `last_name` VARCHAR(20) NOT NULL,
     PRIMARY KEY (`uuid`)
 );
+
+
+DELIMITER //
+ CREATE PROCEDURE register(uuid, email, password, first_name, last_name) VALUES (?))
+      BEGIN
+         INSERT INTO users([user]) VALUES(name);
+         INSERT INTO DemoTable2(ClientName,ClientAge) VALUES(name,age);
+      END
+      //
+DELIMITER ;
