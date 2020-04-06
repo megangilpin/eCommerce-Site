@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // Routes - connects server to the routes folder
-app.use("/users", require("./routes/users.js"))
+app.use("/users", require("./routes/users.js"));
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "client", "build", "index.html"));
@@ -24,7 +24,3 @@ app.get("*", (req, res) => {
 app.listen(PORT, () => {
   console.log(`🌎 ==> API server now on port ${PORT}!`);
 });
-
-
-
-
