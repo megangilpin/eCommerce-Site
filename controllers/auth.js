@@ -5,8 +5,7 @@ const { v4: uuidv4 } = require("uuid");
 
 module.exports = {
   login: async (req, res) => { 
-    const { email, password } = req.body;
-    
+    const { email, password, hash } = req.body;
     try { 
       // Check database for email address
       connection.query("select uuid, password from users where email = ? limit 1", [email], async (error, results) => {
@@ -18,8 +17,9 @@ module.exports = {
             }); 
         } else {
           // Check password
-          // const isMatch = await bcrypt.compare(results[0].password, password);
-          const isMatch = await results[0].password === password; 
+          const isMatch = await bcrypt.compare(password, results[0].password);
+
+          // const isMatch = await results[0].password === password; 
 
           if(!isMatch) { 
             // Return unauthorized for invalid password
