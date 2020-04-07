@@ -76,7 +76,7 @@ module.exports = {
                 return res.status(500).send(err)
               }
               return res.status(200).json({
-                message: "Successfully registered user",
+                saved: true,
                 uuid: uuid,
               })
             });
@@ -85,8 +85,7 @@ module.exports = {
       // if user does exist send back message
       } else {
         return res.status(200).json({
-          users: results,
-          message: "User Exists"
+          saved: false,
         })
       };
     });

@@ -9,7 +9,8 @@ class Form extends Component {
     last_name: "",
     email: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
+    uuid: ""
   };
 
   // handle any changes to the input fields
@@ -39,13 +40,32 @@ class Form extends Component {
       email: this.state.email,
       password: this.state.password,
       confirmPassword: this.state.confirmPassword
+    }).then(res => {
+      if(res.data.saved){
+        
+        this.setState({ 
+          first_name: "",
+          last_name: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+          uuid: res.data.uuid
+        });
+        alert("Thank you for registering!")
+      } else if (!res.data.saved) {
+        this.setState({
+          first_name: "",
+          last_name: "",
+          email: "",
+          password: "",
+          confirmPassword: ""
+        });
+        alert("A user already exists under this email, please try again")
+      }
     })
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    .catch(function (error) {
+      console.log(error);
+    });
   }
 
   render() {
