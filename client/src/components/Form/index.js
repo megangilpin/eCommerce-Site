@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import axios from "axios"; 
 import "./Form.css";
 
 class Form extends Component {
@@ -23,17 +24,35 @@ class Form extends Component {
   };
 
   // When the form is submitted, prevent the default event and alert the username and password
-  handleFormSubmit = event => {
+  handleRegisterSubmit = event => {
     event.preventDefault();
-    alert(`Username: ${this.state.username}\nPassword: ${this.state.password}`);
-    this.setState({ username: "", password: "" });
-  };
+    // check if password matches
+    if (this.state.password !== this.state.confirmPassword) {
+      alert("Passwords don't match, please try again");
+      this.setState({ password: "", confirmPassword: "" });
+      return;
+    }
+    // send user to 
+    axios.post("/auth/register", {
+      first_name: this.state.first_name,
+      last_name: this.state.last_name,
+      email: this.state.email,
+      password: this.state.password,
+      confirmPassword: this.state.confirmPassword
+    })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
 
   render() {
     return (
       <div>
-        <form class="form1" action="">
-          <label for="first_name" class="first-name">First Name</label>
+        <form className="form1" >
+          <label className="first-name">First Name</label>
           <input 
             type="text"
             name="first_name"
@@ -41,7 +60,7 @@ class Form extends Component {
             onChange={this.handleInputChange}
           />
 
-          <label for="last_name" class="last-name">Last Name</label>
+          <label className="last-name">Last Name</label>
           <input 
             type="text"
             name="last_name"
@@ -49,7 +68,7 @@ class Form extends Component {
             onChange={this.handleInputChange}
           />
 
-          <label for="email">Email</label>
+          <label >Email</label>
           <input 
             type="email"
             name="email"
@@ -57,7 +76,7 @@ class Form extends Component {
             onChange={this.handleInputChange}
           />
 
-          <label for="password">Password</label>
+          <label>Password</label>
           <input 
             type="text" 
             name="password"
@@ -65,7 +84,7 @@ class Form extends Component {
             onChange={this.handleInputChange}
           />
 
-          <label for="confirmPassword">Confirm Password</label>
+          <label>Confirm Password</label>
           <input 
             type="text" 
             name="confirmPassword"
@@ -73,7 +92,7 @@ class Form extends Component {
             onChange={this.handleInputChange}
           />
 
-          <button onClick={this.handleFormSubmit}>Submit</button>
+          <button onClick={this.handleRegisterSubmit}>Submit</button>
         </form>
       </div>
     );
