@@ -17,7 +17,7 @@ class Register extends Component {
           <div className="parent">
             <div className="title">
               <h2>Register</h2>
-              <Link className="title" to="/">← Back to Authors</Link>
+              <Link className="title" to="/">← Back to Shopping</Link>
             </div>
             <Form />
           </div>

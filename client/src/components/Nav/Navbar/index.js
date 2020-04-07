@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios"; 
 import jwtdecode from "jwt-decode";
 import Login from "../Login"
@@ -25,7 +26,7 @@ export default class Home extends Component {
         nav: (
           <>
             <li className="nav" onClick={this.handleClick}>Login</li>
-            <li className="nav">Register</li>
+            <Link className="title" to="/register">Register</Link>
           </> 
         ),
       }); 

@@ -1,3 +1,9 @@
+.main {
+  background-color: white;
+  outline: black;
+  outline-width: 1px;
+  outline-style: solid;
+}
 #navbar { 
   background-color: #f1f1f1;
   height: 70px;
