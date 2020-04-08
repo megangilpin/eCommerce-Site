@@ -19,8 +19,6 @@ module.exports = {
           // Check password
           const isMatch = await bcrypt.compare(password, results[0].password);
 
-          // const isMatch = await results[0].password === password; 
-
           if(!isMatch) { 
             // Return unauthorized for invalid password
             return res.status(200).json({ 
@@ -62,7 +60,7 @@ module.exports = {
     //checks if user already exists
     connection.query('select * from users where email = ?', [email], (err, results) => {
       // if no user exists create hashed password and add to user table
-      if (results[0] === undefined) {        
+      if (results.length === 0) {        
         // creates hashed password with the help of bcrypt npm
         bcrypt.hash(password, saltRounds, function (err, hash) {
           if (err) {
@@ -86,6 +84,7 @@ module.exports = {
       } else {
         return res.status(200).json({
           saved: false,
+          message: "A user with that email already exists"
         })
       };
     });

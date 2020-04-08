@@ -60,7 +60,7 @@ class Form extends Component {
           password: "",
           confirmPassword: ""
         });
-        alert("A user already exists under this email, please try again")
+        alert(`${res.data.message}, please try again`)
       }
     })
     .catch(function (error) {
