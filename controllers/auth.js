@@ -5,8 +5,7 @@ const { v4: uuidv4 } = require("uuid");
 
 module.exports = {
   login: async (req, res) => { 
-    const { email, password } = req.body;
-    
+    const { email, password, hash } = req.body;
     try { 
       // Check database for email address
       connection.query("select uuid, password from users where email = ? limit 1", [email], async (error, results) => {
@@ -18,8 +17,7 @@ module.exports = {
             }); 
         } else {
           // Check password
-          // const isMatch = await bcrypt.compare(results[0].password, password);
-          const isMatch = await results[0].password === password; 
+          const isMatch = await bcrypt.compare(password, results[0].password);
 
           if(!isMatch) { 
             // Return unauthorized for invalid password
@@ -51,14 +49,45 @@ module.exports = {
     };
   },
   register: async (req, res) => { 
-    try { 
-      // TODO: User registration
 
-    } catch (error) { 
-      return res.status(500).json({ 
-        message: error,
-      });
-    };
+    // creates uuid to use as user's ref number with the help of uuid npm
+    const uuid = uuidv4();
+    const { first_name, last_name, email, password } = req.body
+
+    // saltRound for bcrypt
+    const saltRounds = 10;
+
+    //checks if user already exists
+    connection.query('select * from users where email = ?', [email], (err, results) => {
+      // if no user exists create hashed password and add to user table
+      if (results.length === 0) {        
+        // creates hashed password with the help of bcrypt npm
+        bcrypt.hash(password, saltRounds, function (err, hash) {
+          if (err) {
+            return res.status(500).send(err)
+          }
+          else {
+            let user = [uuid, email, hash, first_name, last_name]
+            // adds user to the user table
+            connection.query('insert into users (uuid, email, password, first_name, last_name) values (?)', [user], async (error, results) => {
+              if (err) {
+                return res.status(500).send(err)
+              }
+              return res.status(200).json({
+                saved: true,
+                uuid: uuid,
+              })
+            });
+          }
+        });
+      // if user does exist send back message
+      } else {
+        return res.status(200).json({
+          saved: false,
+          message: "A user with that email already exists"
+        })
+      };
+    });
   }, 
   validate: async (req, res) => { 
     const uuid = req.body.uuid;

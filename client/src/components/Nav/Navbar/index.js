@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios"; 
 import jwtdecode from "jwt-decode";
 import Login from "../Login"
@@ -25,7 +26,7 @@ export default class Home extends Component {
         nav: (
           <>
             <li className="nav" onClick={this.handleClick}>Login</li>
-            <li className="nav">Register</li>
+            <Link className="title" to="/register">Register</Link>
           </> 
         ),
       }); 
@@ -116,8 +117,8 @@ export default class Home extends Component {
 
   render() { 
     return ( 
-      <>
-        <div id="navbar">
+      <div>
+        <nav id="navbar">
           <div className="container"> 
             <ul className="nav">
               {this.state.nav} 
@@ -125,9 +126,9 @@ export default class Home extends Component {
           </div>
 
           
-        </div>
+        </nav>
         <Login onClick={this.handleSubmit} />
-      </> 
+      </div> 
     );
   };
 };

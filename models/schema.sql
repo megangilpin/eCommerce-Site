@@ -16,14 +16,14 @@ CREATE TABLE `user_profile` (
   `state` VARCHAR(2) NULL,
   `postcode` VARCHAR(20) NULL, 
   `country` VARCHAR(2) NOT NULL, 
-  `default` BOOLEAN NOT NULL,
+  `primary` BOOLEAN NOT NULL,
     PRIMARY KEY (`uuid`)
 );
 
 CREATE TABLE `users` (
   `uuid` VARCHAR(50) NOT NULL, 
   `email` VARCHAR(50) NOT NULL,
-  `password` VARCHAR(50) NOT NULL,
+  `password` VARCHAR(100) NOT NULL,
   `first_name` VARCHAR(20) NOT NULL,
   `last_name` VARCHAR(20) NOT NULL,
   `last_login` BIGINT(50) NULL,

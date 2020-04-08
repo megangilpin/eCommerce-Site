@@ -11,7 +11,7 @@ export default class Login extends Component {
       <>
         <div id="login" className="hidden">
           <div className="container"> 
-            <div> 
+            <div className="main"> 
               <div>
                   Email
               </div>
