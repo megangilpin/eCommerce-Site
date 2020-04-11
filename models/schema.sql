@@ -37,6 +37,7 @@ CREATE TABLE `products` (
   `category_id` INTEGER NOT NULL, 
   `price` VARCHAR(20) NOT NULL,
   `size` VARCHAR(20) NOT NULL,
+  `color` VARCHAR(50) NOT NULL,
   `description` VARCHAR(255) NOT NULL,
   `image` VARCHAR(255) NOT NULL,
     PRIMARY KEY (`id`)
