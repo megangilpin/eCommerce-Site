@@ -43,19 +43,20 @@ CREATE TABLE `products` (
 );
 
 CREATE TABLE `reviews` (
-  `id`  INTEGER NOT NULL,
+  `id`  INTEGER NOT NULL AUTO_INCREMENT,
   `product_id` INTEGER NOT NULL,
   `commnent` VARCHAR(225) NULL,
   `rating` INTEGER NULL,
     PRIMARY KEY (`id`),
-    FOREIGN KEY (product_id) REFERENCES products(product_id)
+    FOREIGN KEY (product_id) REFERENCES products(id)
 );
 
 CREATE TABLE `categories` (
-  `id`  INTEGER NOT NULL,   
-  `name` VARCHAR(100) NOT NULL,
+  `id`  INTEGER NOT NULL AUTO_INCREMENT,   
+  `title` VARCHAR(100) NOT NULL,
   `parent_id` INTEGER NULL,
     PRIMARY KEY (`id`),
-    FOREIGN KEY (parentid) REFERENCES categories (id)
+    FOREIGN KEY (parent_id) REFERENCES categories (id)
+    ON DELETE CASCADE ON UPDATE CASCADE
 );
 
