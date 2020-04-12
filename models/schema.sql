@@ -30,3 +30,34 @@ CREATE TABLE `users` (
   `access_token` VARCHAR(255) NULL,
     PRIMARY KEY (`uuid`)
 );
+
+CREATE TABLE `products` (
+  `id` INTEGER NOT NULL, 
+  `name` VARCHAR(50) NOT NULL,
+  `category_id` INTEGER NOT NULL, 
+  `price` VARCHAR(20) NOT NULL,
+  `size` VARCHAR(20) NOT NULL,
+  `color` VARCHAR(50) NOT NULL,
+  `description` VARCHAR(255) NOT NULL,
+  `image` VARCHAR(255) NOT NULL,
+    PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `reviews` (
+  `id`  INTEGER NOT NULL AUTO_INCREMENT,
+  `product_id` INTEGER NOT NULL,
+  `commnent` VARCHAR(225) NULL,
+  `rating` INTEGER NULL,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (product_id) REFERENCES products(id)
+);
+
+CREATE TABLE `categories` (
+  `id`  INTEGER NOT NULL AUTO_INCREMENT,   
+  `title` VARCHAR(100) NOT NULL,
+  `parent_id` INTEGER NULL,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (parent_id) REFERENCES categories (id)
+    ON DELETE CASCADE ON UPDATE CASCADE
+);
+
