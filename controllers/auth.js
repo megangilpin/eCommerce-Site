@@ -52,8 +52,43 @@ module.exports = {
   },
   register: async (req, res) => { 
     try { 
-      // TODO: User registration
+          // creates uuid to use as user's ref number with the help of uuid npm
+    const uuid = uuidv4();
+    const { first_name, last_name, email, password } = req.body
 
+    // saltRound for bcrypt
+    const saltRounds = 10;
+
+    //checks if user already exists
+    connection.query('select * from users where email = ?', [email], (err, results) => {
+      // if no user exists create hashed password and add to user table
+      if (results.length === 0) {        
+        // creates hashed password with the help of bcrypt npm
+        bcrypt.hash(password, saltRounds, function (err, hash) {
+          if(err) {
+            return res.status(500).send(err)
+          } else {
+            let user = [uuid, email, hash, first_name, last_name]
+            // adds user to the user table
+            connection.query('insert into users (uuid, email, password, first_name, last_name) values (?)', [user], async (error, results) => {
+              if (err) {
+                return res.status(500).send(err)
+              }
+              return res.status(200).json({
+                saved: true,
+                uuid: uuid,
+              })
+            });
+          }
+        });
+      // if user does exist send back message
+      } else {
+        return res.status(200).json({
+          saved: false,
+          message: "A user with that email already exists"
+        })
+      };
+    });
     } catch (error) { 
       return res.status(500).json({ 
         message: error,
@@ -69,7 +104,7 @@ module.exports = {
       // Check if the stored token has not been modified
       connection.query("select * from users where uuid = ? and access_token = ?", [uuid, access_token], async (error, results) => {
         // If the uuid and access token do not match then deny access
-        if(results === undefined) { 
+        if(results.length === 0) { 
           return res.status(200).json({ 
             access: "deny",
           });

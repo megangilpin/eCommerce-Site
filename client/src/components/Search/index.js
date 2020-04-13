@@ -30,45 +30,45 @@ export default class Search extends Component {
     .catch(err => console.log(err));
   };
 
-    handleChange = (e) => { 
-      const list = document.getElementById("searchMenu").classList;
-      let searchLength = document.getElementById("searchInput").value.length
+  handleChange = (e) => { 
+    const list = document.getElementById("searchMenu").classList;
+    let searchLength = document.getElementById("searchInput").value.length
 
-      switch (searchLength > 0) {
-      case true: 
-          list.remove("hidden");
-          this.setState({ searchOpen: true })
-          break;
-      default: 
-          list.add("hidden");
-      };
-
-      this.setState({ searchInput: e.target.value });
-    }
-
-    handleClick = (e) => { 
-      const list = document.getElementById("searchMenu").classList;
-      const searchInput = document.getElementById("searchInput").classList;
-      
-      // Toggle list if menu button is not clicked on
-      switch (e.target.parentNode.id || e.target.id) {
-          case "searchMenu":
-            list.add("hidden");
-            searchInput.remove("focus");
-            this.setState({ searchOpen: false })
-            break;
-
-          case "searchInput":
-            searchInput.add("focus");
-            if (e.target.value !== "" && this.state.searchOpen === false) { 
-                list.remove("hidden"); 
-            }
-            break;
-
-          default:
-              return; // Do nothing
-      };
+    switch (searchLength > 0) {
+    case true: 
+        list.remove("hidden");
+        this.setState({ searchOpen: true })
+        break;
+    default: 
+        list.add("hidden");
     };
+
+    this.setState({ searchInput: e.target.value });
+  }
+
+  handleClick = (e) => { 
+    const list = document.getElementById("searchMenu").classList;
+    const searchInput = document.getElementById("searchInput").classList;
+    
+    // Toggle list if menu button is not clicked on
+    switch (e.target.parentNode.id || e.target.id) {
+        case "searchMenu":
+          list.add("hidden");
+          searchInput.remove("focus");
+          this.setState({ searchOpen: false })
+          break;
+
+        case "searchInput":
+          searchInput.add("focus");
+          if (e.target.value !== "" && this.state.searchOpen === false) { 
+              list.remove("hidden"); 
+          }
+          break;
+
+        default:
+            return; // Do nothing
+    };
+  };
 
   render() {
     let searchFilter = this.state.productList.filter((products) => { 
