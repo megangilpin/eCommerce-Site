@@ -95,7 +95,7 @@ module.exports = {
       });
     };
   }, 
-  validate: (req, res) => { 
+  validate: async (req, res) => { 
     const uuid = req.body.uuid;
     const access_token = req.body.access_token;
 
