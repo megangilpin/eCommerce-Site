@@ -1,4 +1,4 @@
-.center {
+/* .center {
   display: grid;
   height: 100vh;
   margin: 0;
@@ -7,4 +7,38 @@
 
 .title {
   text-align: center;
+} */
+
+#registerContainer {
+  height: 100%;
+  min-width: 100%;
+}
+
+#registerLeft { 
+  background: #f7f7f7;
+  float: left;
+  min-height: 100%;
+  min-width: 50%;
+  max-width: 50%;
+  outline: 1px solid #f1f1f1;
+}
+
+#registerRight { 
+  float: left;
+  height: 100%;
+  min-width: 50%;
+  max-width: 50%;
+  overflow: auto;
+}
+
+.noInputError { 
+  border-radius: 5px;
+  margin: 0 0 10px 0;
+  padding: 10px;
+  width: 100%; 
+}
+
+#error { 
+  color: red;
+  padding: 20px 0;
 }

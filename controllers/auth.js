@@ -54,6 +54,7 @@ module.exports = {
       // Creates uuid to use as user's ref number with the help of uuid npm
       const uuid = uuidv4();
       const { first_name, last_name, email, password } = req.body;
+      const created = Number(new Date().getTime());
 
       // saltRound for bcrypt
       const saltRounds = 10;
@@ -67,15 +68,14 @@ module.exports = {
             if(err) {
               return res.status(500).send(err);
             } else {
-              let user = [uuid, email, hash, first_name, last_name]
+              let user = [created, uuid, email, hash, first_name, last_name]
               // Adds user to the user table
-              connection.query('insert into users (uuid, email, password, first_name, last_name) values (?)', [user], (error, results) => {
+              connection.query('insert into users (created, uuid, email, password, first_name, last_name) values (?)', [user], (error, results) => {
                 if(err) {
                   return res.status(500).send(err);
                 } else {
                   return res.status(200).json({
                     saved: true,
-                    uuid: uuid,
                   });
                 };
               });
@@ -85,7 +85,7 @@ module.exports = {
         } else {
           return res.status(200).json({
             saved: false,
-            message: "A user with that email already exists",
+            message: "Email already exists, please try again",
           });
         };
       });
