@@ -57,16 +57,14 @@ export default class Search extends Component {
           searchInput.remove("focus");
           this.setState({ searchOpen: false })
           break;
-
         case "searchInput":
           searchInput.add("focus");
-          if (e.target.value !== "" && this.state.searchOpen === false) { 
+          if(e.target.value !== "" && this.state.searchOpen === false) { 
               list.remove("hidden"); 
-          }
+          };
           break;
-
         default:
-            return; // Do nothing
+            return; 
     };
   };
 
@@ -79,31 +77,33 @@ export default class Search extends Component {
       <>
         {
         this.state.searchOpen
-          ? <div>
-              <input 
-                  type="text" 
-                  id="searchInput" 
-                  onChange={this.handleChange} 
-              />
-              <ul id="searchMenu" className="hidden"> 
-              {
-                searchFilter.slice(0, 10).map((product, index) => { 
-                      return (
-                      <li className="search" key={index} data-product={product.id}>
-                        <div className="searchContainer">
-                          <div className="searchDiv">
-                            <img src={product.image} alt={product.name} />
-                          </div> 
-                          <div className="searchText">
-                            {product.name}
-                          </div>
-                        </div>
-                      </li>
-                      )
-                  })
-              }
-              </ul>
-          </div>
+          ? (
+              <div>
+                  <input 
+                      type="text" 
+                      id="searchInput" 
+                      onChange={this.handleChange} 
+                  />
+                  <ul id="searchMenu" className="hidden"> 
+                  {
+                    searchFilter.slice(0, 10).map((product, index) => { 
+                          return (
+                            <li className="search" key={index} data-product={product.id}>
+                              <div className="searchContainer">
+                                <div className="searchDiv">
+                                  <img src={product.image} alt={product.name} />
+                                </div> 
+                                <div className="searchText">
+                                  {product.name}
+                                </div>
+                              </div>
+                            </li>
+                          )
+                      })
+                  }
+                  </ul>
+              </div>
+            )
           : "" 
         }
       </>
