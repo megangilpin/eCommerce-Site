@@ -49,45 +49,50 @@ module.exports = {
     };
   },
   register: async (req, res) => { 
+    try { 
+      // Creates uuid to use as user's ref number with the help of uuid npm
+      const uuid = uuidv4();
+      const { first_name, last_name, email, password } = req.body;
+      const created = Number(new Date().getTime());
 
-    // creates uuid to use as user's ref number with the help of uuid npm
-    const uuid = uuidv4();
-    const { first_name, last_name, email, password } = req.body
+      // saltRound for bcrypt
+      const saltRounds = 10;
 
-    // saltRound for bcrypt
-    const saltRounds = 10;
-
-    //checks if user already exists
-    connection.query('select * from users where email = ?', [email], (err, results) => {
-      // if no user exists create hashed password and add to user table
-      if (results.length === 0) {        
-        // creates hashed password with the help of bcrypt npm
-        bcrypt.hash(password, saltRounds, function (err, hash) {
-          if (err) {
-            return res.status(500).send(err)
-          }
-          else {
-            let user = [uuid, email, hash, first_name, last_name]
-            // adds user to the user table
-            connection.query('insert into users (uuid, email, password, first_name, last_name) values (?)', [user], async (error, results) => {
-              if (err) {
-                return res.status(500).send(err)
-              }
-              return res.status(200).json({
-                saved: true,
-                uuid: uuid,
-              })
-            });
-          }
-        });
-      // if user does exist send back message
-      } else {
-        return res.status(200).json({
-          saved: false,
-          message: "A user with that email already exists"
-        })
-      };
-    });
+      // Checks if user already exists
+      connection.query('select * from users where email = ?', [email], async (err, results) => {
+        // If no user exists create hashed password and add to user table
+        if (await results.length === 0) {        
+          // Creates hashed password with the help of bcrypt npm
+          bcrypt.hash(password, saltRounds, (err, hash) => {
+            if(err) {
+              return res.status(500).send(err);
+            } else {
+              let user = [created, uuid, email, hash, first_name, last_name]
+              // Adds user to the user table
+              connection.query('insert into users (created, uuid, email, password, first_name, last_name) values (?)', [user], (error, results) => {
+                if(err) {
+                  return res.status(500).send(err);
+                } else {
+                  return res.status(200).json({
+                    saved: true,
+                  });
+                };
+              });
+            };
+          });
+        // If user does exist send back message
+        } else {
+          return res.status(200).json({
+            saved: false,
+            message: "Email already exists, please try again",
+          });
+        };
+      });
+    } catch(error) { 
+      return res.status(500).json({ 
+        message: error,
+      });
+    };
   }, 
   validate: async (req, res) => { 
     const uuid = req.body.uuid;
