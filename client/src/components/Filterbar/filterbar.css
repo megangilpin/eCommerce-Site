@@ -1,0 +1,5 @@
+.filterContainer {
+  background-color: lightpink;
+  display: flex;
+  justify-content: start;
+}
