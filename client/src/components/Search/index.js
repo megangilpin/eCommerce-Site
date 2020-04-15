@@ -61,7 +61,7 @@ export default class Search extends Component {
           searchInput.add("focus");
           if(e.target.value !== "" && this.state.searchOpen === false) { 
               list.remove("hidden"); 
-          }
+          };
           break;
         default:
             return; 

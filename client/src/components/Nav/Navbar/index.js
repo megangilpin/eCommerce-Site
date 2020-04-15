@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import axios from "axios"; 
 import jwtdecode from "jwt-decode";
 import Login from "../Login"
+import Search from "../../Search"
 import "./Navbar.css";
 
 export default class Home extends Component { 
@@ -123,9 +124,8 @@ export default class Home extends Component {
             <ul className="nav">
               {this.state.nav} 
             </ul>
+            <Search />
           </div>
-
-          
         </nav>
         <Login onClick={this.handleSubmit} />
       </div> 

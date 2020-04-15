@@ -5,7 +5,8 @@ const { v4: uuidv4 } = require("uuid");
 
 module.exports = {
   login: async (req, res) => { 
-    const { email, password, hash } = req.body;
+    const { email, password } = req.body;
+    
     try { 
       // Check database for email address
       connection.query("select uuid, password from users where email = ? limit 1", [email], async (error, results) => {
@@ -17,7 +18,7 @@ module.exports = {
             }); 
         } else {
           // Check password
-          const isMatch = await bcrypt.compare(password, results[0].password);
+          const isMatch = await bcrypt.compare(results[0].password, password);
 
           if(!isMatch) { 
             // Return unauthorized for invalid password
@@ -103,7 +104,7 @@ module.exports = {
       // Check if the stored token has not been modified
       connection.query("select * from users where uuid = ? and access_token = ?", [uuid, access_token], async (error, results) => {
         // If the uuid and access token do not match then deny access
-        if(results[0] === undefined) { 
+        if(await results.length === 0) { 
           return res.status(200).json({ 
             access: "deny",
           });
@@ -123,7 +124,7 @@ module.exports = {
           });
         };
       });
-    } catch (error) { 
+    } catch(error) { 
       return res.status(500).json({ 
         message: error,
       });
