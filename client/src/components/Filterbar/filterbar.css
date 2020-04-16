@@ -1,8 +1,5 @@
 .filterContainer {
-  display: flex;
-  justify-content: flex-start;
-  padding: 0;
-  background-color: lightpink;
+  position: relative; 
 }
 
 button.filter {
@@ -16,15 +13,13 @@ button.filter {
   font-size: 16px;
 }
 
-button.filter:hover,
-button.filter:focus {
-    background: none;
+button.filter:hover {
+  text-decoration: underline;
 }
 
 button.filter:focus {
     outline: none;
     outline-offset: none;
-    text-decoration: underline;
 }
 
 button.filter:active {
@@ -32,9 +27,13 @@ button.filter:active {
 }
 
 .filterMenu {
-  background-color: thistle;
-  padding: 0;
-  display: flex;
+  display:flex;
   flex-direction: column;
   align-items: flex-start;
+  background-color: lavender;
+  padding: 0;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  position: absolute;
+  width: 100%;
 }

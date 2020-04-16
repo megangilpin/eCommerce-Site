@@ -1,0 +1,22 @@
+.contentContainer {
+  padding: 50px;
+  height: 500px;
+  width: 950px;
+  margin: auto; 
+  display: grid;
+  grid-template-columns: 1fr 2.5fr;
+  grid-template-rows: 1fr;
+  gap: 0px 17px;
+  grid-template-areas: "category-filter items";
+}
+
+.categoryFilter { 
+  background-color: teal;
+  grid-area: category-filter; 
+}
+
+.items { 
+  background-color: tomato;
+  grid-area: items; 
+}
+
