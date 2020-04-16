@@ -47,6 +47,7 @@ export default class Search extends Component {
   }
 
   handleClick = (e) => { 
+    e.preventDefault()
     const list = document.getElementById("searchMenu").classList;
     const searchInput = document.getElementById("searchInput").classList;
     

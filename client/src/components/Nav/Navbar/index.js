@@ -5,6 +5,7 @@ import jwtdecode from "jwt-decode";
 import Login from "../Login"
 import Search from "../../Search"
 import "./Navbar.css";
+import Filterbar from "../../Filterbar/Filterbar";
 
 export default class Home extends Component { 
   state = { 
@@ -125,6 +126,7 @@ export default class Home extends Component {
               {this.state.nav} 
             </ul>
             <Search />
+            <Filterbar />
           </div>
         </nav>
         <Login onClick={this.handleSubmit} />
