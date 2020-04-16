@@ -1,19 +1,27 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import axios from "axios"; 
 import jwtdecode from "jwt-decode";
-import Login from "../Login"
+import Login from "../Login"; 
+import { Div } from "../../FormComponents";
+
 import "./Navbar.css";
 
 export default class Home extends Component { 
   state = { 
-      showLogin: false,
       loggedIn: false,
       nav: "",
+      liDotNav: { 
+        listStyle: "none",
+        cursor: "pointer",
+        display: "inline-block",
+        padding: "0 30px 0 0",
+        paddingInlineStart: "0px",
+      }, 
   }; 
 
   componentDidMount = async () => { 
     document.addEventListener("keydown", this.handleKeyPress, false);
+    document.addEventListener("click", this.handleClick, false);
 
     const access_token = await window.localStorage.getItem("access_token");
     const jwt_decoded = await access_token ? jwtdecode(access_token) : ""; 
@@ -25,8 +33,8 @@ export default class Home extends Component {
         loggedIn: false, 
         nav: (
           <>
-            <li className="nav" onClick={this.handleClick}>Login</li>
-            <Link className="title" to="/register">Register</Link>
+            <li id="loginNav" style={this.state.liDotNav}>Login</li>
+            <li id="registerNav" style={this.state.liDotNav}>Register</li>
           </> 
         ),
       }); 
@@ -48,36 +56,37 @@ export default class Home extends Component {
           }); 
         } else {
           this.setState({ 
-            loggedIn: false, nav: (
+            loggedIn: false, 
+            nav: (
               <>
-                <li className="nav" onClick={this.handleClick}>Login</li>
-                <li className="nav">Register</li>
+                <li id="loginNav" style={this.state.liDotNav}>Login</li>
+                <li id="registerNav" style={this.state.liDotNav}>Register</li>
               </> 
             )
           }); 
         }
       }).catch(err => console.log(err));
-    }
+    };
   };
 
   handleSubmit = (e) => {
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value; 
+    const email = document.getElementById("loginEmail").value;
+    const password = document.getElementById("loginPassword").value; 
 
     axios.post("/auth/login", {email, password}).then((result, err) => {
       if(result.data.status === 401) { 
         document.getElementById("error").innerHTML = result.data.message;
       } else { 
         document.getElementById("error").innerHTML = "";
-        document.getElementById("login").classList.add("hidden");
+        document.getElementById("login").setAttribute("style", "display: none");
         
         window.localStorage.setItem("access_token", result.data.access_token);
         this.setState({ 
           loggedIn: true,
           nav: (
             <>
-              <li className="nav">Profile</li>
-              <li className="nav" onClick={this.handleLogout}>Logout</li>
+              <li className="nav" style={this.state.liDotNav}>Profile</li>
+              <li className="nav" style={this.state.liDotNav} onClick={this.handleLogout}>Logout</li>
             </>
           ),
         });
@@ -89,46 +98,58 @@ export default class Home extends Component {
     switch(e.key) {
       case "Enter":
         this.handleSubmit(e);
-        break;
-        
+      break;
       default:
-          return; // Do nothing if anything but enter is pressed
+          return; 
     };
   };
 
   handleLogout = () => { 
     window.localStorage.clear();
     window.location.reload();
-  }
+  };
 
-  handleClick = () => {
-    if(this.state.showLogin === false) {
-      document.getElementById("login").classList.remove("hidden");
-      this.setState({ 
-        showLogin: true
-      });
-    } else {
-      document.getElementById("login").classList.add("hidden");
-      this.setState({ 
-        showLogin: false,
-      });
-    }
-  }
+  handleClick = (e) => {
+    const navOption = e.target.id; 
+
+    if(navOption === "registerNav") { 
+      window.location.href = "/register";
+    };
+  };
 
   render() { 
+    
+    const navbar = { 
+      backgroundColor: "#f1f1f1",
+      height: "70px",
+      position: "absolute",
+      top: "0px",
+      width: "100%", 
+    };
+    
+    const navContainer = { 
+      lineHeight: "35px",
+      margin: "0 auto",
+      position: "relative",
+      width: "964px", 
+    };
+    
+    const ulDotNav = { 
+      listStyle: "none",
+      paddingInlineStart: "0px",
+    };
+
     return ( 
-      <div>
-        <nav id="navbar">
-          <div className="container"> 
-            <ul className="nav">
+      <Div>
+        <nav id="navbar" style={navbar}>
+          <Div className="container" style={navContainer}> 
+            <ul className="nav" style={ulDotNav}>
               {this.state.nav} 
             </ul>
-          </div>
-
-          
+          </Div>
         </nav>
         <Login onClick={this.handleSubmit} />
-      </div> 
+      </Div> 
     );
   };
 };
