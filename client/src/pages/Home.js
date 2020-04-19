@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import Navbar from "../components/Nav/Navbar";
-import Filterbar from "../components/Filterbar/Filterbar";
+import FilterButton from "../components/FilterButton/FilterButton";
 import Item from "../components/Item/Item";
 import "./Home.css";
 
@@ -9,7 +9,8 @@ import "./Home.css";
 export default class Register extends Component {
   state = {
     productList: [],
-    filterList: [],
+    selectedFilters: [],
+    colorFilter: [{ name: "red", checked: false, id: 1 }, { name: "orange", checked: false, id: 2 }, { name: "yellow", checked: false, id: 3 }, { name: "green", checked: false, id: 4 }, { name: "blue", checked: false, id: 5}, {name: "purple", checked: false, id:6} ]
   }
 
   componentDidMount = () => {
@@ -18,30 +19,37 @@ export default class Register extends Component {
     const products = [];
 
     axios.get("/api/products").then(res => {
-      console.log(res.data.data)
+
       res.data.data.forEach(product => {
         products.push({
           id: product.id,
           name: product.name,
           image: product.image,
+          color: product.color
         });
       });
-      this.setState({ productList: products });
-
+      
+      this.setState({ productList: products});
     })
       .catch(err => console.log(err));
   };
 
-  addFilter = (event) => {
-    console.log("clicked")
+  handleCheckboxChange = (event) => {
     event.preventDefault();
+    let filters = this.state.colorFilter
+    const value  = event.target.value;
+    filters.forEach(color => {
+      console.log(value)
+      if(color.name === value) {
+        color.checked = true
+      }
+    })
     this.setState({
-      filterList: [...this.state.filterList, event.target.value ]
+      colorFilter: filters,
+      selectedFilters: [...this.state.selectedFilters, event.target.value]
     })
   }
 
-  handleCheckChieldElement = (event) => {
-  }
 
 
 
@@ -55,9 +63,11 @@ export default class Register extends Component {
             <p>Categories to go here</p>
           </div>
           <div className="items">
-            {this.state.filterList.length > 0 ? this.state.filterList.map(filter => <button>{filter}</button>) : (null)}
-            <Filterbar 
+            {this.state.selectedFilters.length > 0 ? this.state.selectedFilters.map((filter, index) => <button key={index}>{filter}</button>) : (null)}
+            <FilterButton
               addFilter={this.addFilter}
+              filters={this.state.colorFilter}
+              handleCheckboxChange={this.handleCheckboxChange}
             />
             <div style={{display: "flex", justifyContent: "start", padding: "10px"}}>
             {this.state.productList ? this.state.productList.map(product => 
