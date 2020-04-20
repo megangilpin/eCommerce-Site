@@ -16,7 +16,7 @@ module.exports = {
     });
   }, 
   productSearch: (req, res) => { 
-    connection.query('select id, name, image, color from products', (err, results) => {
+    connection.query('select id, name, image, color, size from products', (err, results) => {
       if(err) {
         return res.status(500).json({ 
           message: err,

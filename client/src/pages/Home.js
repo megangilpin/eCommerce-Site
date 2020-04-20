@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import Navbar from "../components/Nav/Navbar";
-import FilterButton from "../components/FilterButton/FilterButton";
+import FilterBar from "../components/FilterBar/FilterBar";
 import Item from "../components/Item/Item";
 import "./Home.css";
 
@@ -12,7 +12,8 @@ export default class Register extends Component {
     filteredProducts: [],
     selectedFilters: [],
     checked: false,
-    color: [{ name: "Red", checked: false, id: 1 }, { name: "Orange", checked: false, id: 2 }, { name: "Yellow", checked: false, id: 3 }, { name: "Green", checked: false, id: 4 }, { name: "Blue", checked: false, id: 5}, {name: "Purple", checked: false, id:6} ]
+    color: [{ name: "Red", checked: false, id: 1 }, { name: "Orange", checked: false, id: 2 }, { name: "Yellow", checked: false, id: 3 }, { name: "Green", checked: false, id: 4 }, { name: "Blue", checked: false, id: 5}, {name: "Purple", checked: false, id:6} ],
+    size: [{ name: "Small", checked: false, id: 1 }, { name: "Medium", checked: false, id: 2 }, { name: "Large", checked: false, id: 3 }]
   }
 
   componentDidMount = () => {
@@ -23,10 +24,11 @@ export default class Register extends Component {
           id: product.id,
           name: product.name,
           image: product.image,
-          color: product.color
+          color: product.color,
+          size: product.size
         });
       });
-      
+      console.log(products)
       this.setState({ productList: products, filteredProducts: products});
     })
       .catch(err => console.log(err));
@@ -119,25 +121,28 @@ export default class Register extends Component {
         <Navbar />
         
         <div className="contentContainer">
-          <div className="categoryFilter">
-            <p>Categories to go here</p>
-          </div>
-          <div className="items">
-            {this.state.selectedFilters.length > 0 ? this.state.selectedFilters.map((filter, index) => 
-              <button 
-                key={index}
-                value={filter[1]}
-                name={filter[0]} 
-                onClick={this.removeFilterButton}
-              >{filter[1]}</button>) : (null)
-            }
-            <FilterButton
-              filterName="Color"
-              addFilter={this.addFilter}
-              filters={this.state.color}
-              checked={this.state.checked}
-              handleCheckboxChange={this.handleCheckboxChange}
-            />
+          <div className="products">
+            <div style={{ display: "flex", justifyContent: "start", flexWrap: "wrap", padding: "10px" }}>
+              {this.state.selectedFilters.length > 0 ? this.state.selectedFilters.map((filter, index) => 
+                <button style={{margin: "5px"}}
+                  key={index}
+                  value={filter[1]}
+                  name={filter[0]} 
+                  onClick={this.removeFilterButton}
+                >{filter[1]}</button>) : (null)
+              }
+            </div>
+            <div style={{ width: "100%"}}>
+              <FilterBar style={{ display: "inline-block"}}
+                filterName1="Color"
+                filterName2="Size"
+                addFilter={this.addFilter}
+                filters1={this.state.color}
+                filters2={this.state.size}
+                checked={this.state.checked}
+                handleCheckboxChange={this.handleCheckboxChange}
+              />
+            </div>
             <div style={{display: "flex", justifyContent: "start", flexWrap: "wrap",padding: "10px"}}>
             {this.state.filteredProducts ? this.state.filteredProducts.map(product => 
               <Item 
