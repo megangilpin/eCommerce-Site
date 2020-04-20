@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import Navbar from "../components/Nav/Navbar";
 import FilterBar from "../components/FilterBar/FilterBar";
+import FilterButton from "../components/FilterBar/FilterButton/FilterButton";
 import Item from "../components/Item/Item";
 import "./Home.css";
 
@@ -132,17 +133,22 @@ export default class Register extends Component {
                 >{filter[1]}</button>) : (null)
               }
             </div>
-            <div style={{ width: "100%"}}>
-              <FilterBar style={{ display: "inline-block"}}
-                filterName1="Color"
-                filterName2="Size"
-                addFilter={this.addFilter}
-                filters1={this.state.color}
-                filters2={this.state.size}
-                checked={this.state.checked}
-                handleCheckboxChange={this.handleCheckboxChange}
-              />
-            </div>
+              <FilterBar>
+                <FilterButton 
+                  filterName="Color"
+                  addFilter={this.addFilter}
+                  filters={this.state.color}
+                  checked={this.state.checked}
+                  handleCheckboxChange={this.handleCheckboxChange}
+                  />
+                <FilterButton
+                  filterName="Size"
+                  addFilter={this.addFilter}
+                  filters={this.state.size}
+                  checked={this.state.checked}
+                  handleCheckboxChange={this.handleCheckboxChange}
+                />
+              </FilterBar>
             <div style={{display: "flex", justifyContent: "start", flexWrap: "wrap",padding: "10px"}}>
             {this.state.filteredProducts ? this.state.filteredProducts.map(product => 
               <Item 
