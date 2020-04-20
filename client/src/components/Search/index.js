@@ -11,7 +11,7 @@ export default class Search extends Component {
   }
 
   componentDidMount = () => { 
-    document.addEventListener("click", this.handleClick, false);
+    document.getElementById("searchInput").addEventListener("click", this.handleClick, false);
 
     const products = []; 
     

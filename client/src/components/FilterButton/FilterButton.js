@@ -17,14 +17,14 @@ class FilterButton extends Component {
   render() {
     return (
         <div className="filterContainer">
-          <button onClick={this.showMenu} className="filter">Show Menu</button>
+          <button onClick={this.showMenu} className="filter">{this.props.filterName} filter</button>
         {this.state.isShown ? 
         (<div className="filterMenu">
             {this.props.filters.map(filter => 
               <label key={filter.id}>
                   <input 
                     type="checkbox"
-                    name={filter.name}
+                    name={this.props.filterName}
                     value={filter.name}
                     checked={filter.checked}
                     onChange={this.props.handleCheckboxChange}/>
