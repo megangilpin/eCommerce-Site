@@ -1,46 +1,35 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import './filterbutton.css'
 
-class FilterButton extends Component {
-  state = {
-    isShown: false
-  }
-
-  showMenu = (event) => {
-    event.preventDefault();
-    const element = document.getElementById(`${this.props.filterName}`).classList;
-    if(!this.state.isShown) {
-      element.add("down")
-    } else{
-      element.remove("down")
-    }
-    this.setState ({
-      isShown: !this.state.isShown
-    })
-  }
-
-  render() {
+function FilterButton (props) {
     return (
-        <>
-        <button onClick={this.showMenu} className="filter">{this.props.filterName} <FontAwesomeIcon className="fa-xs rotate" id={this.props.filterName} icon="chevron-up" /></button>
-        {this.state.isShown ? 
-        (<div className="filterMenu">
-            {this.props.filters.map(filter => 
+      <>
+        <button style={{ textTransform: "capitalize" }} className="filter" value={props.filterName} onClick={props.showMenu}>
+          {props.filterName} 
+          <FontAwesomeIcon
+            style={{marginLeft: "5px"}}
+            className={`fa-xs rotate ${props.isShown ? "down" : ""}`}
+            icon="chevron-up" 
+          />
+        </button>
+        {props.isShown ? 
+          (<div className="filterMenu">
+            {props.filters.map(filter => 
               <label key={filter.id}>
-                  <input 
-                    type="checkbox"
-                    name={this.props.filterName}
-                    value={filter.name}
-                    checked={filter.checked}
-                    onChange={this.props.handleCheckboxChange}/>
-                  <span className="filterName">{filter.name}</span>
-                </label>
-              )}
-        </div>):(null) }
+                <input 
+                  type="checkbox"
+                  name={props.filterName}
+                  value={filter.name}
+                  checked={filter.checked}
+                  onChange={props.handleCheckboxChange}/>
+                <span style={{ textTransform: "capitalize"}} className="filterName">{filter.name}</span>
+              </label>
+            )}
+          </div>):(null)
+        }
       </>
     );
   }
-}
 
 export default FilterButton;

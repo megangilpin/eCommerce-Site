@@ -2,19 +2,17 @@ import React, { Component } from "react";
 import axios from "axios";
 import Navbar from "../components/Nav/Navbar";
 import FilterBar from "../components/FilterBar/FilterBar";
-import FilterButton from "../components/FilterBar/FilterButton/FilterButton";
 import Item from "../components/Item/Item";
 import "./Home.css";
 
 
 export default class Register extends Component {
   state = {
-    productList: [],
-    filteredProducts: [],
-    selectedFilters: [],
-    checked: false,
-    color: [{ name: "Red", checked: false, id: 1 }, { name: "Orange", checked: false, id: 2 }, { name: "Yellow", checked: false, id: 3 }, { name: "Green", checked: false, id: 4 }, { name: "Blue", checked: false, id: 5}, {name: "Purple", checked: false, id:6} ],
-    size: [{ name: "Small", checked: false, id: 1 }, { name: "Medium", checked: false, id: 2 }, { name: "Large", checked: false, id: 3 }]
+    productList: [], //all products from api call
+    filteredProducts: [],// products that match filters
+    selectedFilters: [], // filters
+    color: [{ name: "red", checked: false, id: 1 }, { name: "orange", checked: false, id: 2 }, { name: "yellow", checked: false, id: 3 }, { name: "green", checked: false, id: 4 }, { name: "blue", checked: false, id: 5}, {name: "purple", checked: false, id:6} ], //list of color filters for check boxes
+    size: [{ name: "small", checked: false, id: 1 }, { name: "medium", checked: false, id: 2 }, { name: "large", checked: false, id: 3 }] //list of size filters for check boxes
   }
 
   componentDidMount = () => {
@@ -29,133 +27,124 @@ export default class Register extends Component {
           size: product.size
         });
       });
-      console.log(products)
       this.setState({ productList: products, filteredProducts: products});
     })
       .catch(err => console.log(err));
   };
 
+  // handles click event for check box then adds or removes filters to products depending on checked value in filter
   handleCheckboxChange = (event) => {
-    const value = event.target.value.toLowerCase();
-    const name = event.target.name.toLowerCase();
-    let filters = this.state[name]
+    const value = event.target.value;
+    const type = event.target.name;
+    let filters = [...this.state[type]] //array to determine which check box is selected
     filters.forEach(filter => {
-      if(filter.name.toLowerCase() === value) {
+      if (filter.name === value) {
         filter.checked = event.target.checked
       }
     })
     if(event.target.checked) {
-      this.filterProduct(name, value)
-      this.setState({
-        [event.target.name]: filters,
-      })
+      this.filterProduct(type, value, filters)
     } else {
-      this.removeFilter(name, value)
-      this.setState({
-        [name]: filters,
-      })
+      this.removeFilter(type, value, filters)
     }
   }
+  
+  // removes the filters button, updates the checked boxes then removes filters
+  removeFilterButton = (event) => {
+    let value = event.target.value
+    let type = event.target.name
+    let filters = [...this.state[type]] //array to determine which check box is selected
+    filters.forEach(filter => {
+      if (filter.name === value) {
+        filter.checked = false
+      }
+    })
+    this.removeFilter(type, value, filters)
+  }
 
-  filterProduct = (name, value) => {
-    let filter = [name, value];
-    let newFilters = [...this.state.selectedFilters];
+  // filters product list to only show selected filters
+  filterProduct = (type, value, filters) => {
+    let filter = [type, value];
+    let newFilters = [...this.state.selectedFilters]; //array to determine which check box is selected
     newFilters.push(filter);
     let newList = [];
+    // loops through the product list and creates new filteredProducts array
     this.state.productList.forEach(product =>{
       newFilters.forEach(filter => {
-        if(product[name].toLowerCase() === filter[1]){
+        if(product[type] === filter[1]){
           newList.push(product)
         }
       })
     })
     this.setState({
       filteredProducts: newList,
-      selectedFilters: newFilters
+      selectedFilters: newFilters,
+      [type]: filters
     })
   }
 
-  removeFilter = (name, value) => {
+  // removes filters from product list
+  removeFilter = (type, value, filters) => {
+    // remove the selected filter from the filter list
     let newFilters = this.state.selectedFilters.filter(filter => filter[1] !== value);
+    // if the length is 0 reset the filteredProduct array to be all products
     if(newFilters.length === 0){
-      console.log(newFilters)
       this.setState({
         filteredProducts: this.state.productList,
         selectedFilters: []
       })
     } else {
+      // loops through the product list and creates new filteredProducts array
       let newList = [];
       this.state.productList.forEach(product => {
         newFilters.forEach(filter => {
-          if (product[name].toLowerCase() === filter[1]) {
+          if (product[type] === filter[1]) {
             newList.push(product)
           }
         })
       })
       this.setState({
         filteredProducts: newList,
-        selectedFilters: newFilters
+        selectedFilters: newFilters,
+        [type]: filters
       })
     }
   }
-
-  removeFilterButton = (event) => {
-    let value = event.target.value;
-    let name = event.target.name;
-    this.removeFilter(name, value)
-    let filters = this.state[name]
-    filters.forEach(filter => {
-      if (filter.name.toLowerCase() === value) {
-        filter.checked = event.target.checked
-      }
-    })
-    this.setState({
-      [event.target.name]: filters,
-    })
-  }
-
-  
 
   render() {
     return (
         <>
         <Navbar />
-        
         <div className="contentContainer">
           <div className="products">
             <div style={{ display: "flex", justifyContent: "start", flexWrap: "wrap", padding: "10px" }}>
               {this.state.selectedFilters.length > 0 ? this.state.selectedFilters.map((filter, index) => 
-                <button style={{margin: "5px"}}
+                <button style={{ margin: "5px", textTransform: "capitalize"}}
                   key={index}
-                  value={filter[1]}
                   name={filter[0]} 
+                  value={filter[1]}
                   onClick={this.removeFilterButton}
-                >{filter[1]}</button>) : (null)
+                  aria-label={`Remove ${filter[1]} filter`}
+                >
+                  {filter[1]} &times;
+                </button>) : (null)
               }
             </div>
-              <FilterBar>
-                <FilterButton 
-                  filterName="Color"
-                  addFilter={this.addFilter}
-                  filters={this.state.color}
-                  checked={this.state.checked}
-                  handleCheckboxChange={this.handleCheckboxChange}
-                  />
-                <FilterButton
-                  filterName="Size"
-                  addFilter={this.addFilter}
-                  filters={this.state.size}
-                  checked={this.state.checked}
-                  handleCheckboxChange={this.handleCheckboxChange}
-                />
-              </FilterBar>
+            <FilterBar
+              filter1={this.state.color}
+              filterName1="color"
+              filter2={this.state.size}
+              filterName2="size"
+              handleCheckboxChange={this.handleCheckboxChange}
+            />
             <div style={{display: "flex", justifyContent: "start", flexWrap: "wrap",padding: "10px"}}>
-            {this.state.filteredProducts ? this.state.filteredProducts.map(product => 
-              <Item 
-                key={product.id}
-                img={product.image}
-                name={product.name}
-              />) : (null)}
+              {this.state.filteredProducts ? this.state.filteredProducts.map(product => 
+                <Item 
+                  key={product.id}
+                  img={product.image}
+                  name={product.name}
+                />) : (null)
+              }
             </div>
           </div>
         </div>

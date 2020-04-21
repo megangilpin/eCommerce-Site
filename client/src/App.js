@@ -1,14 +1,13 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { fab } from '@fortawesome/free-brands-svg-icons'
-import { faChevronUp } from '@fortawesome/free-solid-svg-icons'
+import { faChevronUp, faTimes } from '@fortawesome/free-solid-svg-icons'
 import Home from "./pages/Home"
 import Register from "./pages/Register"
 import './App.css';
 
 function App() {
-  library.add(fab, faChevronUp)
+  library.add(faChevronUp, faTimes)
   return (
     <Router>
       <>
