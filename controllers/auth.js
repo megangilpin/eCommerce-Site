@@ -1,127 +1,129 @@
 const connection = require("../config/connection.js");
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 const { v4: uuidv4 } = require("uuid");
 
 module.exports = {
   login: async (req, res) => { 
-    const { email, password, hash } = req.body;
+    const { email, password } = req.body;
+    
     try { 
-      // Check database for email address
-      connection.query("select uuid, password from users where email = ? limit 1", [email], async (error, results) => {
-        if(results.length === 0) {     
-            // Return unauthorized for invalid email
+      // Search for email inputted into log in form
+      const q = "SELECT uuid, email, password, first_name, last_name FROM users WHERE email = ? LIMIT 1";
+
+      connection.query(q, [email], async (err, r) => {
+        // No email address on file
+        if (r.length === 0) {     
             return res.status(200).json({
               status: 401, 
-              message: "Incorrect email" 
+              message: "Incorrect email",
             }); 
         } else {
-          // Check password
-          const isMatch = await bcrypt.compare(password, results[0].password);
-
-          if(!isMatch) { 
-            // Return unauthorized for invalid password
-            return res.status(200).json({ 
-              status: 401,
-              message: "Incorrect password" 
-            });
-          } else { 
-            // If password is correct, generate JWT new token
-            jwt.sign({ "uuid": results[0].uuid }, process.env.JWT, { expiresIn: '6h' }, (err, access_token) => {
-              if(err) console.log(err);
-
-              connection.query(`update users set access_token = '${access_token}', last_login = ${Number(new Date().getTime())} where uuid = '${results[0].uuid}'`, (error, results) => { 
-                if(error) console.log(error);
-
-                return res.status(200).json({ 
-                  access_token: access_token, 
-                  access: "approve",
-                });
+          // Check password if email address is found
+          const isMatch = await bcrypt.compare(password, r[0].password);
+          
+          switch (!isMatch) { 
+            case true: 
+              return res.json({ 
+                status: 401,
+                message: "Incorrect password", 
               });
-            });
+            default:  
+              // If successful, update the session cookie so log in can remain active
+              req.session.uuid = r[0].uuid;
+              res.json({ 
+                access: "granted",
+              });
           };
         };
       });
-    } catch (error) { 
+    } catch (err) { 
       return res.status(500).json({ 
-        message: error 
+        message: err,
       });
     };
   },
   register: async (req, res) => { 
+    try { 
+      const { first_name, last_name, email, password } = req.body;
 
-    // creates uuid to use as user's ref number with the help of uuid npm
-    const uuid = uuidv4();
-    const { first_name, last_name, email, password } = req.body
+      connection.query('SELECT * FROM users WHERE email = ?', [email], async (err, results) => {
+        const uuid = uuidv4(); // Generate unique user id
+        const saltRounds = 10; // Password hash rounds
+       
+        if (await results.length === 0) {        
+          // Hash password
+          bcrypt.hash(password, saltRounds, (err, hash) => {
+            if (err) {
+              return res.status(500).send(err);
+            } else {
+              let user = [created, uuid, email, hash, first_name, last_name];
+              const q = 'INSERT INTO users (created, uuid, email, password, first_name, last_name) VALUES (?)';
 
-    // saltRound for bcrypt
-    const saltRounds = 10;
-
-    //checks if user already exists
-    connection.query('select * from users where email = ?', [email], (err, results) => {
-      // if no user exists create hashed password and add to user table
-      if (results.length === 0) {        
-        // creates hashed password with the help of bcrypt npm
-        bcrypt.hash(password, saltRounds, function (err, hash) {
-          if (err) {
-            return res.status(500).send(err)
-          }
-          else {
-            let user = [uuid, email, hash, first_name, last_name]
-            // adds user to the user table
-            connection.query('insert into users (uuid, email, password, first_name, last_name) values (?)', [user], async (error, results) => {
-              if (err) {
-                return res.status(500).send(err)
-              }
-              return res.status(200).json({
-                saved: true,
-                uuid: uuid,
-              })
-            });
-          }
-        });
-      // if user does exist send back message
-      } else {
-        return res.status(200).json({
-          saved: false,
-          message: "A user with that email already exists"
-        })
-      };
-    });
-  }, 
-  validate: async (req, res) => { 
-    const uuid = req.body.uuid;
-    const access_token = req.body.access_token;
-
-    try {
-      // On page load, query the database to locate the user
-      // Check if the stored token has not been modified
-      connection.query("select * from users where uuid = ? and access_token = ?", [uuid, access_token], async (error, results) => {
-        // If the uuid and access token do not match then deny access
-        if(results[0] === undefined) { 
-          return res.status(200).json({ 
-            access: "deny",
-          });
-        } else {
-          // Refresh token
-          await jwt.sign({ "uuid": uuid }, process.env.JWT, { expiresIn: '6h' }, (err, new_token) => {
-            if(err) console.log(err);
-            // Update database with a new token and send this upward to stored
-            connection.query(`update users set access_token = '${new_token}', last_login = ${Number(new Date().getTime())} where uuid = '${uuid}'`, (error, results) => { 
-              if(error) console.log(error);
-              
-              return res.status(200).json({ 
-                access_token: new_token, 
-                access: "approve",
+              // Creates new user in database
+              connection.query(q, [user], (err, results) => {
+                if (err) {
+                  return res.status(500).send(err);
+                } else {
+                  req.session.uuid = uuid; // If account is created, set the uuid on the cookie
+                  res.redirect("/"); // Once created, send the user back to where they had come from
+                };
               });
-            });
+            };
+          });
+        // Return error if email exists
+        } else {
+          return res.status(200).json({
+            saved: false,
+            message: "Email already exists, please try again",
           });
         };
       });
-    } catch (error) { 
+    } catch(error) { 
       return res.status(500).json({ 
         message: error,
       });
     };
   }, 
+  validate: async (req, res) => { 
+    // On page load check if there is an active session
+    const { uuid } = req.session;
+
+    if (!uuid) { 
+      // No user return items to be displayed in nav
+      res.json({ 
+        navOptions: ["Login", "Register"], 
+      });
+    } else { 
+      try {
+        const q = "SELECT uuid, email, first_name, last_name FROM users WHERE uuid = ?";
+        connection.query(q, [uuid], async (err, r) => {
+          if (err) { 
+            console.log(err);
+          } else {
+            req.session.uuid = r[0].uuid;
+            res.json({
+              database: r, // Pass up database results in case we want to customize with name
+              navOptions: ["Profile", "Logout"], // return items to be displayed in nav
+            }); 
+          };
+        });
+      } catch(err) { 
+        throw new Error(err);
+      }
+    };
+  }, 
+  logout: (req, res) => { 
+    req.session.destroy(function(err) {
+      if (err) { 
+        return res.json({ 
+          message: "Logout failed"
+        });
+      };
+
+      res.clearCookie(process.env.SESSION_NAME);
+      return res.json({
+        access: "revoked"
+      });
+    });
+  },
 };

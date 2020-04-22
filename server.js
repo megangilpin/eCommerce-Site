@@ -3,6 +3,7 @@ const path = require("path");
 const express = require("express");
 const PORT = process.env.PORT || 3001;
 const bodyParser = require("body-parser");
+const session = require("express-session");
 const app = express();
 
 if (process.env.NODE_ENV === "production") {
@@ -10,6 +11,18 @@ if (process.env.NODE_ENV === "production") {
 }
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(session({
+    secret: process.env.SESSION_PASS, 
+    saveUninitialized: false, 
+    resave: false, 
+    cookie: { 
+      maxAge: 1000 * 60 * 60 * 2, // Expire in 2 hours
+      sameSite: true,
+      secure: process.env.NODE_ENV === "production" ? true : false,
+    }, 
+    name: process.env.SESSION_NAME,
+  })
+);
 
 // Routes 
 app.use("/api", require("./routes/api.js"));

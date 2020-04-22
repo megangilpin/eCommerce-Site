@@ -21,6 +21,7 @@ CREATE TABLE `user_profile` (
 );
 
 CREATE TABLE `users` (
+  `created` BIGINT(50) NOT NULL,
   `uuid` VARCHAR(50) NOT NULL, 
   `email` VARCHAR(50) NOT NULL,
   `password` VARCHAR(100) NOT NULL,
@@ -35,7 +36,7 @@ CREATE TABLE `products` (
   `id` INTEGER NOT NULL, 
   `name` VARCHAR(50) NOT NULL,
   `category_id` INTEGER NOT NULL, 
-  `price` VARCHAR(20) NOT NULL,
+  `price` INTEGER(20) NOT NULL,
   `size` VARCHAR(20) NOT NULL,
   `color` VARCHAR(50) NOT NULL,
   `description` VARCHAR(255) NOT NULL,

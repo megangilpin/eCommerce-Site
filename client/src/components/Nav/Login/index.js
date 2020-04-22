@@ -1,127 +1,88 @@
 import React, { Component } from "react";
-import { Div, Input, Button } from "../../FormComponents";
+import axios from "axios"; 
+
+// Styles
+import { 
+  Error, 
+  LoginLabel, 
+  LoginInput, 
+  LoginPasswordReveal, 
+  LoginButton,
+} from "../../Styles";
 
 export default class Login extends Component { 
   state = { 
-    hidden: true,
+    showError: false,
+    errorMsg: "",
   };
 
   componentDidMount = () => { 
-    document.addEventListener("click", this.hideLogin, false);
+    document.addEventListener("keydown", this.handleKeyPress, false);
   };
 
-  hideLogin = (e) => { 
-    const showLogin = e.target.id;
+  handleSubmit = (e) => {
+    const email = document.getElementById("loginEmail").value;
+    const password = document.getElementById("loginPassword").value; 
 
-    if(showLogin === "loginNav" && this.state.hidden) {
-      this.setState({ hidden: false }); 
-    } else if (showLogin === "loginNav" && this.state.hidden === false) { 
-      this.setState({ hidden: true }); 
+    axios.post("/auth/login", { email, password }).then((r, err) => {
+      if (r.data.status === 401) { 
+        this.setState({
+          showError: true,
+          errorMsg: r.data.message,
+        });
+      } else { 
+        window.location.reload();
+      };
+    });
+  }; 
+
+  handleKeyPress = (e) => { 
+    switch(e.key) {
+      case "Enter":
+        this.handleSubmit(e);
+      break;
+      default:
+        return; 
     };
   };
 
-  render() {
-    const container = {  
-      lineHeight: "35px",
-      margin: "0 auto",
-      position: "relative",
-      width: "964px", 
-    };
-
-    const login = {
-      height: "200px", 
-      position: "absolute",
-      top: "90px",
-      width: "100%", 
-    };
-    
-    const loginEmail = { 
-      border: "1px solid #efefef",
-      boxSizing: "border-box",
-      focus: "none",
-      fontSize: "12pt",
-      padding: "15px 0 15px 15px",
-      width: "100%",
-      MozBoxSizing: "border-box",
-      WebkitBoxSizing: "border-box",
-    };
-    
-    const loginPassword = { 
-      border: "1px solid #efefef",
-      boxSizing : "border-box",
-      fontSize: "12pt",
-      padding: "15px 0px 15px 65px",
-      width: "100%",
-      MozBoxSizing: "border-box",
-      WebkitBoxSizing: "border-box",
-    };
-
-    const showPass = { 
-      color: "#ccc",
-      cursor: "pointer",
-      fontSize: "10pt",
-      float: "right",
-      padding: "15px",
-      position: "absolute",
-      textAlign: "right", 
-      top: "113px",
-    };
-    
-    const hidden = { 
-      display: "none",
-    };
-
-    const error = { 
-      color: "red",
-    }
-
+  render() {  
     return (
       <>
-        <Div id="login" className={this.state.hidden ? hidden : ""} style={this.state.hidden ? hidden : login}>
-          <Div className="container" style={container}> 
-            <Div> 
-              <Div>
-                  Email
-              </Div>
-              <Div>
-                  <Input type="text" id="loginEmail" style={loginEmail} />
-              </Div>
+        <LoginLabel>
+          Email
+        </LoginLabel>
+        <LoginInput type="text" id="loginEmail" />
 
-              <Div>
-                  Password
-              </Div>
-              <Div>
-                <Input type="password" id="loginPassword" style={loginPassword} />
-              </Div>
+        <LoginLabel>
+            Password
+        </LoginLabel>
+        <LoginInput type="password" id="loginPassword" size="15px 0 15px 65px" />
 
-              <Button id="loginSubmit" {...this.props}>
-                Submit
-              </Button>
+        <LoginButton id="loginSubmit" onClick={this.handleSubmit}>
+          Submit
+        </LoginButton>
 
-              <Div id="error" style={error}></Div> 
-            </Div>
+        {this.state.showError === false ? "" : <Error>{this.state.errorMsg}</Error>}
 
-            <Div
-              id="showPass" 
-              style={showPass}
-              onClick={
-                () => { 
-                  switch (document.getElementById("loginPassword").type) {
-                    case "text": 
-                      document.getElementById("loginPassword").type = "password";
-                      document.getElementById("showPass").innerHTML = "ABC";
-                    break;
-                    default:
-                      document.getElementById("loginPassword").type = "text";
-                      document.getElementById("showPass").innerHTML = "***";
-                  }
-                }
-              }
-            > 
-              ABC
-            </Div>
-          </Div>
-        </Div>
+        <LoginPasswordReveal
+          id="revealPassword" 
+          onClick={
+            () => { 
+              switch (document.getElementById("loginPassword").type) {
+                case "text": 
+                  document.getElementById("loginPassword").type = "password";
+                  document.getElementById("revealPassword").innerHTML = "ABC";
+                break;
+                default:
+                  document.getElementById("loginPassword").type = "text";
+                  document.getElementById("revealPassword").innerHTML = "***";
+              };
+            }
+          }
+        > 
+          ABC
+        </LoginPasswordReveal>
       </>
     );
   };
