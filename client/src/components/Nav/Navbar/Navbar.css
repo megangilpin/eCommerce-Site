@@ -1,13 +1,11 @@
+
 .main {
   background-color: white;
-  outline: black;
-  outline-width: 1px;
-  outline-style: solid;
 }
 #navbar { 
   background-color: #f1f1f1;
   height: 70px;
-  position: absolute;
+  /* position: absolute; */
   top: 0px;
   width: 100%; 
 }
@@ -15,13 +13,14 @@
 .container { 
   line-height: 35px;
   margin: 0 auto;
-  position: relative;
+  /* position: relative; */
   width: 964px; 
 }
 
 ul.nav { 
   list-style: none;
   padding-inline-start: 0px;
+  margin-block-start: 0em;
 }
 
 li.nav { 

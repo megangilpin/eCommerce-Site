@@ -1,0 +1,16 @@
+.contentContainer {
+  padding: 50px;
+  height: 500px;
+  width: 950px;
+  margin: auto; 
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  grid-template-areas: "products";
+}
+
+.products { 
+  background-color: white;
+  grid-area: products; 
+}
+
