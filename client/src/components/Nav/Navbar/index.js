@@ -6,7 +6,7 @@ import {
   Container, 
   Nav, 
   NavUl, 
-  NavLi, 
+  NavLi,
 } from "../../Styles";
 
 export default class Home extends Component { 
@@ -27,7 +27,7 @@ export default class Home extends Component {
     });
   };
 
-  render() { 
+  render() {
     return ( 
       <Nav>
         <Container>

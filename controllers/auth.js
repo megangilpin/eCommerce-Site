@@ -109,7 +109,7 @@ module.exports = {
         });
       } catch(err) { 
         throw new Error(err);
-      }
+      };
     };
   }, 
   logout: (req, res) => { 

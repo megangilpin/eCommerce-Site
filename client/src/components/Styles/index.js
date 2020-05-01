@@ -1,40 +1,51 @@
 // Global
-import Container from "./Global/Container";
-import H2 from "./Global/H2";
-import P from "./Global/P";
-import StyledLink from "./Global/StyledLink";
-import Error from "./Global/Error";
+import { 
+  Container, 
+  H2, 
+  P, 
+  StyledLink, 
+  Error, 
+ } from "./Global";
 
 // Register 
-import RegisterWrapper from "./Register/RegisterWrapper";
-import RegisterLeftContainer from "./Register/RegisterLeftContainer";
-import RegisterRightContainer from "./Register/RegisterRightContainer";
-import RegisterPositioner from "./Register/RegisterPositioner";
-import RegisterInput from "./Register/RegisterInput";
-import RegisterLabel from "./Register/RegisterLabel";
-import RegisterButton from "./Register/RegisterButton";
+import { 
+  RegisterWrapper,
+  RegisterLeftContainer, 
+  RegisterRightContainer,
+  RegisterPositioner,
+  RegisterInput,
+  RegisterLabel, 
+  RegisterButton, 
+} from "./Register";
 
 // Navigation bar
-import Nav from "./Nav/Nav";
-import NavUl from "./Nav/NavUl";
-import NavLi from "./Nav/NavLi";
+import { 
+  Nav, 
+  NavUl, 
+  NavLi
+} from "./Nav";
+
 
 // Login
-import LoginCover from "./Login/LoginCover";
-import LoginWrapper from "./Login/LoginWrapper";
-import LoginLabel from "./Login/LoginLabel";
-import LoginInput from "./Login/LoginInput";
-import LoginPasswordReveal from "./Login/LoginPasswordReveal";
-import LoginButton from "./Login/LoginButton";
+import { 
+  LoginCover, 
+  LoginWrapper, 
+  LoginLabel, 
+  LoginInput, 
+  LoginPasswordReveal, 
+  LoginButton 
+} from "./Login";
 
 // Search 
-import SearchInput from "./Search/SearchInput";
-import SearchUl from "./Search/SearchUl";
-import SearchLi from "./Search/SearchLi";
-import SearchContainer from "./Search/SearchContainer";
-import SearchImgContainer from "./Search/SearchImgContainer";
-import SearchImg from "./Search/SearchImg";
-import SearchText from "./Search/SearchText";
+import { 
+  SearchInput,
+  SearchUl,
+  SearchLi,
+  SearchContainer,
+  SearchImgContainer,
+  SearchImg,
+  SearchText,
+} from "./Search";
 
 export {
   // Global styles
